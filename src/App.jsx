@@ -52,13 +52,11 @@ function App() {
           borderTop: "2px solid rgb(224, 219, 219)",
         }}
       />
-      {loading && (
+      {loading ? (
         <div className="loader">
           <p>Loading products...</p>
         </div>
-      )}
-
-      {error ? (
+      ) : error ? (
         <div className="error_card">
           <p className="error_text">Error while loading products.</p>
           <button className="error_btn" onClick={retry}>
