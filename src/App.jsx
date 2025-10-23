@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import FilterCard from "./components/FilterCard";
-import ProductList from "./components/productList";
+import ProductList from "./components/ProductList";
 import { useFetch } from "./hooks/use_fetch";
 
 function App() {
