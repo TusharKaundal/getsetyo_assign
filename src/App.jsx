@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import FilterCard from "./components/FilterCard";
 import ProductList from "./components/ProductList";
 import { useFetch } from "./hooks/use_fetch";
+import PostList from "./components/PostList";
 
 function App() {
   const params = useMemo(() => new URLSearchParams(window.location.search), []);
@@ -66,7 +67,6 @@ function App() {
 
     const queryString = params.toString();
 
-    console.log(queryString);
     window.history.replaceState(
       {},
       "",
@@ -83,7 +83,6 @@ function App() {
       />
       <hr
         style={{
-          marginBlock: "1.5rem",
           border: "none",
           borderTop: "2px solid rgb(224, 219, 219)",
         }}
@@ -96,12 +95,20 @@ function App() {
         <div className="error_card">
           <p className="error_text">Error while loading products.</p>
           <button className="error_btn" onClick={retry}>
-            Retry 🔁
+            Retry
           </button>
         </div>
       ) : (
         <ProductList products={filteredProducts || []} />
       )}
+
+      <hr
+        style={{
+          border: "none",
+          borderTop: "2px solid rgb(224, 219, 219)",
+        }}
+      />
+      <PostList />
     </main>
   );
 }

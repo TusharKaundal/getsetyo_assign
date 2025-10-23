@@ -31,8 +31,10 @@ const FilterCard = ({ filters, handleFilter, categories }) => {
           onChange={(e) => handleFilter({ category: e.target.value })}
         >
           <option value="">All Categories</option>
-          {categories?.map((category) => (
-            <option value={category}>{category}</option>
+          {categories?.map((category, idx) => (
+            <option key={category + idx} value={category}>
+              {category}
+            </option>
           ))}
         </select>
       </div>
