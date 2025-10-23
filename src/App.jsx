@@ -1,22 +1,25 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FilterCard from "./components/FilterCard";
 import ProductList from "./components/ProductList";
 import { useFetch } from "./hooks/use_fetch";
 
 function App() {
+  const params = useMemo(() => new URLSearchParams(window.location.search), []);
   const { data, error, loading, retry } = useFetch(
     "https://dummyjson.com/products"
   );
 
   const [filters, setFilter] = useState({
-    name: "",
-    category: "",
-    minPrice: 0,
-    maxPrice: 3000,
+    name: params.get("name") || "",
+    category: params.get("category") || "",
+    minPrice: Number(params.get("minPrice")) || 0,
+    maxPrice: Number(params.get("maxPrice")) || 3000,
   });
 
   const categories = useMemo(() => {
-    const allCategories = data?.products.map((p) => p.category);
+    const allCategories = data?.products.map(
+      (p) => p.category.charAt(0).toUpperCase() + p.category.slice(1)
+    );
 
     return [...new Set(allCategories)];
   }, [data]);
@@ -31,12 +34,45 @@ function App() {
       .toLowerCase()
       .includes(filters?.name.toLowerCase());
     const categoryMatch =
-      !filters.category || product.category === filters.category;
+      !filters.category || product.category === filters.category.toLowerCase();
     const priceMatch =
       product.price >= filters.minPrice && product.price <= filters.maxPrice;
 
     return nameMatch && categoryMatch && priceMatch;
   });
+
+  useEffect(() => {
+    if (filters.name) {
+      params.set("name", filters.name);
+    } else {
+      params.delete("name");
+    }
+
+    if (filters.category) {
+      params.set("category", filters.category);
+    } else {
+      params.delete("category");
+    }
+    if (filters.minPrice !== 0) {
+      params.set("minPrice", String(filters.minPrice));
+    } else {
+      params.delete("minPrice");
+    }
+    if (filters.maxPrice !== 3000) {
+      params.set("maxPrice", String(filters.maxPrice));
+    } else {
+      params.delete("maxPrice");
+    }
+
+    const queryString = params.toString();
+
+    console.log(queryString);
+    window.history.replaceState(
+      {},
+      "",
+      window.location.pathname + (queryString ? "?" : "") + queryString
+    );
+  }, [filters, params]);
 
   return (
     <main>

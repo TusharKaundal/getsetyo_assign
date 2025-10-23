@@ -1,7 +1,16 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "./pricerange.css";
 const PriceRangeSelector = ({ filters, handleFilter }) => {
   const priceRangeRef = useRef(0);
+
+  useEffect(() => {
+    if (filters.minPrice >= 0 && priceRangeRef.current) {
+      priceRangeRef.current.style.left = `${filters.minPrice / 30}%`;
+    }
+    if (filters.maxPrice <= 3000 && priceRangeRef.current) {
+      priceRangeRef.current.style.right = `${100 - filters.maxPrice / 30}%`;
+    }
+  }, [priceRangeRef, filters]);
 
   function handleMinRange(value) {
     priceRangeRef.current.style.left = `${value / 30}%`;
