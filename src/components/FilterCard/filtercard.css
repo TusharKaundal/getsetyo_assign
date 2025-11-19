@@ -10,15 +10,17 @@
     border-radius: 1rem;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
-    button {
+    .filters_clearBtn {
         padding: 0.5rem 1rem;
         border: 2px solid rgb(188, 184, 184);
         border-radius: 0.5rem;
         background-color: white;
+        color: black;
 
         &:hover {
             background-color: rgba(0, 123, 255, 0.2);
             border-color: #0056b3;
+            color: #0056b3;
             cursor: pointer;
         }
     }

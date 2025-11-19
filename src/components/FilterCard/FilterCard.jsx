@@ -1,20 +1,20 @@
 import "./filtercard.css";
-import PriceRangeSelector from "./PriceRangeSelector";
+import PriceRangeSelector from "../PriceRange/PriceRangeSelector";
 
-const FilterCard = ({ filters, handleFilter, categories }) => {
+const FilterCard = ({ filters, handleFilter, categories, maxPriceValue }) => {
   function handleClearFilter() {
     handleFilter({
       name: "",
       category: "",
       minPrice: 0,
-      maxPrice: 3000,
+      maxPrice: maxPriceValue,
     });
   }
   return (
     <section className="filters_wrapper">
       <h2 className="filters_header">Filters</h2>
       <div className="filters_name">
-        <label>Search by Name</label>
+        <label htmlFor="product_name">Search by Name</label>
         <input
           id="product_name"
           type="text"
@@ -24,7 +24,7 @@ const FilterCard = ({ filters, handleFilter, categories }) => {
         />
       </div>
       <div className="filters_category">
-        <label>Category</label>
+        <label htmlFor="product_category">Category</label>
         <select
           id="product_category"
           value={filters?.category}
@@ -38,7 +38,11 @@ const FilterCard = ({ filters, handleFilter, categories }) => {
           ))}
         </select>
       </div>
-      <PriceRangeSelector filters={filters} handleFilter={handleFilter} />
+      <PriceRangeSelector
+        filters={filters}
+        handleFilter={handleFilter}
+        maxPriceValue={maxPriceValue}
+      />
       <button className="filters_clearBtn" onClick={handleClearFilter}>
         Clear All Filters
       </button>

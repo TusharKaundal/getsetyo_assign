@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import FilterCard from "./components/FilterCard";
-import ProductList from "./components/ProductList";
+import FilterCard from "./components/FilterCard/FilterCard";
+import ProductList from "./components/ProductList/ProductList";
+import PostList from "./components/PostList/PostList";
 import { useFetch } from "./hooks/use_fetch";
-import PostList from "./components/PostList";
 
 function App() {
   const params = useMemo(() => new URLSearchParams(window.location.search), []);
@@ -14,7 +14,7 @@ function App() {
     name: params.get("name") || "",
     category: params.get("category") || "",
     minPrice: Number(params.get("minPrice")) || 0,
-    maxPrice: Number(params.get("maxPrice")) || 3000,
+    maxPrice: Number(params.get("maxPrice")) || data?.maxPriceValue || 3000,
   });
 
   const categories = useMemo(() => {
@@ -59,7 +59,7 @@ function App() {
     } else {
       params.delete("minPrice");
     }
-    if (filters.maxPrice !== 3000) {
+    if (filters.maxPrice !== (data?.maxPriceValue || 3000)) {
       params.set("maxPrice", String(filters.maxPrice));
     } else {
       params.delete("maxPrice");
@@ -72,7 +72,17 @@ function App() {
       "",
       window.location.pathname + (queryString ? "?" : "") + queryString
     );
-  }, [filters, params]);
+  }, [filters, params, data]);
+
+  useEffect(() => {
+    if (!data?.maxPriceValue) return;
+
+    setFilter((prev) => ({
+      ...prev,
+      maxPrice:
+        prev.maxPrice > data.maxPriceValue ? data.maxPriceValue : prev.maxPrice,
+    }));
+  }, [data?.maxPriceValue]);
 
   return (
     <main>
@@ -80,6 +90,7 @@ function App() {
         filters={filters}
         handleFilter={handleFilter}
         categories={categories}
+        maxPriceValue={data?.maxPriceValue || 3000}
       />
       <hr
         style={{

@@ -1,5 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+function getMaxPrice(products) {
+  if (!Array.isArray(products) || products.length === 0) return 3000;
+
+  return Math.ceil(
+    products.reduce(
+      (max, product) => Math.max(max, Number(product.price) || 0),
+      0
+    )
+  );
+}
+
 const fetchCache = new Map();
 const CACHED_DURATION = 3 * 60 * 1000; // 3 minutes
 
@@ -18,6 +29,7 @@ export function useFetch(url) {
     no request is to be made again if present */
 
     const cached = fetchCache.get(url);
+
     if (cached && Date.now() - cached.timestamp < CACHED_DURATION) {
       setState({
         data: cached.data,
@@ -48,12 +60,18 @@ export function useFetch(url) {
 
       // Cache the successful response
       fetchCache.set(url, {
-        data,
+        data: {
+          ...data,
+          ...(data?.products && { maxPriceValue: getMaxPrice(data?.products) }),
+        },
         timestamp: Date.now(),
       });
 
       setState({
-        data,
+        data: {
+          ...data,
+          ...(data?.products && { maxPriceValue: getMaxPrice(data?.products) }),
+        },
         error: null,
         loading: false,
         retry: () => {

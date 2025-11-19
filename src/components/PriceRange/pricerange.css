@@ -1,0 +1,51 @@
+.filters_range_container {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    /* Adjust as needed */
+}
+
+.filters_range_input {
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    background: transparent;
+    pointer-events: none;
+    appearance: none;
+
+    &::-webkit-slider-thumb {
+        appearance: none;
+        width: 17px;
+        height: 17px;
+        position: relative;
+        z-index: 300;
+        border: 2px solid #007bff;
+        background-color: #0471e4;
+        border-radius: 50%;
+        cursor: pointer;
+        pointer-events: all;
+    }
+}
+
+.filters_range_track,
+.filter_range_fill {
+    position: absolute;
+    z-index: -1;
+    top: 0.3rem;
+    width: 100%;
+    height: 0.7rem;
+    border: 2px solid rgb(188, 184, 184);
+    border-radius: 1rem;
+}
+
+.filter_range_fill {
+    background-color: #0471e4;
+    border: 1px solid #007bff;
+}
+
+.price_Range {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
